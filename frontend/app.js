@@ -1,4 +1,4 @@
-/* TapeOut 生态资助托管板 —— 纯静态前端（无 CDN，ethers 本地加载），可放入 TapeOut 容器 / GitHub Pages */
+/* BEM 任务托管 —— 纯静态前端（无 CDN，ethers 本地加载），可放入 TapeOut 容器 / GitHub Pages */
 (() => {
 const E = window.ethers, CFG = window.GRANTS_CONFIG;
 const NET = CFG.networks[new URLSearchParams(location.search).get("net") || CFG.active] || CFG.networks[CFG.active];
@@ -7,68 +7,72 @@ const DEAD = "0x000000000000000000000000000000000000dEaD";
 // ------------------------------------------------------------------ i18n
 const I18N = {
 zh: {
-  appName:"TapeOut 生态资助托管板", connect:"连接钱包", connected:"已连接", navPools:"资助池", navCreate:"创建资助池", navMe:"我的面板", navAbout:"规则说明",
+  appName:"BEM 任务托管", connect:"连接钱包", connected:"已连接", navPools:"任务池", navCreate:"创建任务池", navMe:"我的面板", navAbout:"规则说明",
+  heroTitle:"钱先锁，活干完，验收即结算。", heroSub:"项目方找人干活，BEM 先锁进合约；接单人交付后，验收人确认，合约自动结算。谁也赖不了账，每一笔都能在 BscScan 查。",
   bannerTest:"测试网演示 · BSC Testnet · 代币是测试 BEM，没有任何价值", bannerMain:"BSC 主网 · 真实 BEM",
-  totalLocked:"托管中", totalPaid:"已发放", totalBurned:"已销毁", pools:"资助池列表", noPools:"还没有资助池", loading:"加载中…",
-  pool:"资助池", funder:"资助方", approvers:"审批人", threshold:"放款需要", sig:"签名", burn:"放款销毁", available:"未分配", allocated:"已分配",
-  deposited:"累计存入", withdrawn:"资助方已取回", milestones:"里程碑 / 资助项目", noMs:"还没有里程碑", amount:"金额", deadline:"申请截止", recipient:"受助人",
-  status:"状态", Open:"开放申请", Awarded:"已选定", Paid:"已放款", Cancelled:"已取消", apps:"申请", noApps:"暂无申请", delivery:"交付链接",
-  releaseVotes:"放款票", cancelVotes:"取消票", awardVotes:"票", applyHere:"申请这个项目", applyPh:"你的方案 / 作品链接（GitHub、推文、IPFS…）", applyBtn:"提交申请",
-  topUp:"追加资金（任何人）", topUpBtn:"授权并追加", approverPanel:"审批人面板", funderPanel:"资助方面板", recipientPanel:"受助人操作",
-  voteAward:"投票选定", voteRelease:"同意放款", voteCancel:"投票取消（退回资金池）", youVoted:"你已投", submitDelivery:"提交交付", deliveryPh:"交付链接",
-  relinquish:"放弃（退回资金池）", expire:"标记过期（退回资金池）", newMs:"新建里程碑", msTitle:"标题", msDesc:"说明 / 链接", days:"申请期（天）",
-  directRecipient:"直接指定受助人（可留空，开放申请）", createMs:"创建里程碑", reqWithdraw:"申请取回未分配资金（7 天公示）", reqBtn:"发起取回申请",
-  pendingWithdraw:"待执行取回", unlockAt:"可执行时间", execWithdraw:"执行取回", cancelWithdraw:"撤销取回申请", history:"链上记录",
-  loadMore:"加载更早的记录", createPool:"创建资助池", poolTitle:"资助池名称", poolDesc:"说明（规则、方向、联系方式，可填链接）", depositAmt:"存入 BEM 数量",
-  approversList:"审批人地址（每行一个，建议 3 个）", thresholdM:"放款需要几个审批人同意（M）", burnPct:"放款销毁比例 %（默认 1，最高 10）", createBtn:"授权并创建",
+  totalLocked:"托管中", totalPaid:"已结算", totalBurned:"已销毁", pools:"任务池列表", noPools:"还没有任务池", loading:"加载中…",
+  pool:"任务池", funder:"发布方", approvers:"验收人", threshold:"结算需要", sig:"人同意", burn:"结算销毁", available:"未分配", allocated:"已分配",
+  deposited:"累计存入", withdrawn:"发布方已取回", milestones:"任务 / 阶段", noMs:"还没有任务", amount:"金额", deadline:"接单截止", recipient:"接单人",
+  status:"状态", Open:"开放接单", Awarded:"已定接单人", Paid:"已结算", Cancelled:"已取消", apps:"接单申请", noApps:"暂无接单申请", delivery:"交付链接",
+  releaseVotes:"结算票", cancelVotes:"取消票", awardVotes:"票", applyHere:"接单", applyPh:"你的方案 / 作品链接（GitHub、推文、IPFS…）", applyBtn:"提交接单申请",
+  topUp:"追加资金（任何人）", topUpBtn:"授权并追加", approverPanel:"验收人面板", funderPanel:"发布方面板", recipientPanel:"接单人操作",
+  voteAward:"投票选定", voteRelease:"验收通过，同意结算", voteCancel:"投票取消（退回任务池）", youVoted:"你已投", submitDelivery:"提交交付", deliveryPh:"交付链接",
+  relinquish:"放弃（退回任务池）", expire:"标记过期（退回任务池）", newMs:"新建任务", msTitle:"标题", msDesc:"说明 / 验收标准 / 链接", days:"接单期（天）",
+  directRecipient:"直接指定接单人（可留空，开放接单）", createMs:"创建任务", reqWithdraw:"取回未分配资金（7 天公示）", reqBtn:"发起取回",
+  pendingWithdraw:"待执行取回", unlockAt:"可执行时间", execWithdraw:"执行取回", cancelWithdraw:"撤销取回", history:"链上记录",
+  loadMore:"加载更早的记录", createPool:"创建任务池", poolTitle:"任务池名称", poolDesc:"说明（任务方向、验收标准、联系方式，可填链接）", depositAmt:"存入 BEM 数量",
+  approversList:"验收人地址（每行一个，建议 3 个）", thresholdM:"结算需要几个验收人同意（M）", burnPct:"结算销毁比例 %（默认 1，最高 10）", createBtn:"授权并创建",
   myBal:"我的 BEM", needConnect:"请先连接钱包", noWallet:"没有检测到钱包。请在 TokenPocket / MetaMask 的内置浏览器里打开本页。", wrongNet:"请切换到",
   sent:"交易已发送，等待确认…", done:"交易成功", failed:"失败", approving:"正在授权 BEM…", fill:"请填写完整", contract:"合约", token:"代币", rpc:"RPC",
-  explorer:"区块浏览器", myPools:"我是资助方的资助池", myApprover:"我是审批人的资助池", myRecipient:"我是受助人的项目", none:"无", go:"打开",
+  explorer:"区块浏览器", myPools:"我发布的任务池", myApprover:"我是验收人的任务池", myRecipient:"我接的任务", none:"无", go:"打开",
   todo:"待你处理", viewOnScan:"在 BscScan 查看", faucet:"测试网 BNB 水龙头", mintTest:"领取 1000 测试 BEM", only:"仅", tx:"交易",
   aboutHtml:`<h2>它是怎么运作的</h2>
-<ol><li><b>资助方</b>（基金会、项目方、个人）创建资助池，把 BEM 锁进合约，并指定 N 个审批人和放款门槛 M（例如 2-of-3）。任何人都可以往池子里追加 BEM。</li>
-<li>资助方或审批人从池子里划出<b>里程碑</b>（金额 + 申请截止时间）。这部分资金立即变为“已分配”。</li>
-<li><b>开发者</b>提交申请（方案链接上链）。M 个审批人投票选定后，受助人确定。</li>
-<li>受助人交付后提交链接，<b>M 个审批人同意放款</b>，合约立即把 BEM 打给受助人，并按池子设定比例（默认 1%）转入 0x…dEaD 销毁。</li></ol>
-<h2>信任模型</h2>
-<ul><li>审批人<b>能</b>：选定受助人、同意放款、取消未放款的里程碑（都需要 M 票）。</li>
-<li>审批人<b>不能</b>：把钱转给自己或任何非受助人地址；单个审批人什么都做不了。</li>
-<li>资助方<b>能</b>：取回“未分配”的余额，但必须提前 7 天在链上公示。</li>
-<li>资助方<b>不能</b>：动已分配给里程碑的资金——这部分只能放给受助人，或经 M 票取消后退回资金池。</li>
+<p>项目方找人干活，钱先锁进合约，干完验收自动结算，谁也赖不了账。</p>
+<ol><li><b>发布方</b>（项目方、团队、个人）创建任务池，把 BEM 锁进合约，并指定 N 个<b>验收人</b>和结算门槛 M（例如 3 人里 2 人同意）。任何人都可以往池子里追加 BEM。</li>
+<li>发布方或验收人从池子里划出<b>任务</b>（金额 + 接单截止时间）。这部分资金立即变为“已分配”。</li>
+<li>想干活的人提交<b>接单申请</b>（方案链接上链）。M 个验收人投票选定后，接单人确定。</li>
+<li>接单人交付后提交链接，<b>M 个验收人确认通过</b>，合约立即把 BEM 结算给接单人，并按池子设定比例（默认 1%）转入 0x…dEaD 销毁。</li></ol>
+<h2>谁能做什么</h2>
+<ul><li>验收人<b>能</b>：选定接单人、确认结算、取消还没结算的任务（都需要 M 票）。</li>
+<li>验收人<b>不能</b>：把钱转给自己或接单人以外的任何地址；单个验收人什么都做不了。</li>
+<li>发布方<b>能</b>：取回“未分配”的余额，但必须提前 7 天在链上公示。</li>
+<li>发布方<b>不能</b>：动已分配给任务的资金——这部分只能结算给接单人，或经 M 票取消后退回任务池。</li>
 <li>合约<b>没有 owner、不可升级</b>，没有任何管理员提款函数。每一步都有事件，可在 BscScan 公开查询。</li>
-<li>无人获选的里程碑过了申请截止时间，任何人都可以标记过期，资金退回资金池；受助人也可以自愿放弃。</li></ul>`
+<li>没人接的任务过了接单截止时间，任何人都可以标记过期，资金退回任务池；接单人也可以主动放弃。</li></ul>`
 },
 en: {
-  appName:"TapeOut Grant Escrow Board", connect:"Connect wallet", connected:"Connected", navPools:"Pools", navCreate:"Create pool", navMe:"My panel", navAbout:"How it works",
+  appName:"BEM Task Escrow", connect:"Connect wallet", connected:"Connected", navPools:"Task pools", navCreate:"Create pool", navMe:"My panel", navAbout:"How it works",
+  heroTitle:"Lock first. Deliver. Settle on sign-off.", heroSub:"A client locks BEM in the contract up front; the contractor delivers; reviewers sign off and the contract settles automatically. No one can skip out on payment, and every settlement is on BscScan.",
   bannerTest:"TESTNET DEMO · BSC Testnet · test BEM has no value", bannerMain:"BSC Mainnet · real BEM",
-  totalLocked:"Locked", totalPaid:"Paid out", totalBurned:"Burned", pools:"Grant pools", noPools:"No pools yet", loading:"Loading…",
-  pool:"Pool", funder:"Funder", approvers:"Approvers", threshold:"Release needs", sig:"sigs", burn:"Burn on payout", available:"Unallocated", allocated:"Allocated",
-  deposited:"Deposited", withdrawn:"Withdrawn by funder", milestones:"Milestones / grants", noMs:"No milestones yet", amount:"Amount", deadline:"Apply by", recipient:"Recipient",
-  status:"Status", Open:"Open", Awarded:"Awarded", Paid:"Paid", Cancelled:"Cancelled", apps:"Applications", noApps:"No applications", delivery:"Delivery",
-  releaseVotes:"Release votes", cancelVotes:"Cancel votes", awardVotes:"votes", applyHere:"Apply for this grant", applyPh:"Your proposal / work link (GitHub, tweet, IPFS…)", applyBtn:"Apply",
-  topUp:"Top up (anyone)", topUpBtn:"Approve & top up", approverPanel:"Approver panel", funderPanel:"Funder panel", recipientPanel:"Recipient actions",
-  voteAward:"Vote to award", voteRelease:"Approve release", voteCancel:"Vote cancel (back to pool)", youVoted:"You voted", submitDelivery:"Submit delivery", deliveryPh:"Delivery link",
-  relinquish:"Relinquish (back to pool)", expire:"Mark expired (back to pool)", newMs:"New milestone", msTitle:"Title", msDesc:"Description / link", days:"Application period (days)",
-  directRecipient:"Direct recipient (optional; empty = open applications)", createMs:"Create milestone", reqWithdraw:"Withdraw unallocated funds (7-day notice)", reqBtn:"Request withdrawal",
+  totalLocked:"Locked", totalPaid:"Settled", totalBurned:"Burned", pools:"Task pools", noPools:"No task pools yet", loading:"Loading…",
+  pool:"Pool", funder:"Client", approvers:"Reviewers", threshold:"Settlement needs", sig:"sign-offs", burn:"Burn on settlement", available:"Unallocated", allocated:"Allocated",
+  deposited:"Deposited", withdrawn:"Withdrawn by client", milestones:"Tasks / stages", noMs:"No tasks yet", amount:"Amount", deadline:"Take by", recipient:"Contractor",
+  status:"Status", Open:"Open", Awarded:"Assigned", Paid:"Settled", Cancelled:"Cancelled", apps:"Offers to take", noApps:"No offers yet", delivery:"Delivery",
+  releaseVotes:"Settle votes", cancelVotes:"Cancel votes", awardVotes:"votes", applyHere:"Take the task", applyPh:"Your plan / work link (GitHub, tweet, IPFS…)", applyBtn:"Submit offer",
+  topUp:"Top up (anyone)", topUpBtn:"Approve & top up", approverPanel:"Reviewer panel", funderPanel:"Client panel", recipientPanel:"Contractor actions",
+  voteAward:"Vote to assign", voteRelease:"Accept & settle", voteCancel:"Vote cancel (back to pool)", youVoted:"You voted", submitDelivery:"Submit delivery", deliveryPh:"Delivery link",
+  relinquish:"Give up (back to pool)", expire:"Mark expired (back to pool)", newMs:"New task", msTitle:"Title", msDesc:"Description / acceptance criteria / link", days:"Open for (days)",
+  directRecipient:"Assign a contractor directly (optional; empty = open to offers)", createMs:"Create task", reqWithdraw:"Withdraw unallocated funds (7-day notice)", reqBtn:"Request withdrawal",
   pendingWithdraw:"Pending withdrawal", unlockAt:"Executable at", execWithdraw:"Execute withdrawal", cancelWithdraw:"Cancel request", history:"On-chain history",
-  loadMore:"Load older", createPool:"Create a grant pool", poolTitle:"Pool name", poolDesc:"Description (scope, rules, contact; links OK)", depositAmt:"BEM to deposit",
-  approversList:"Approver addresses (one per line, 3 recommended)", thresholdM:"Approvals needed (M)", burnPct:"Burn % on payout (default 1, max 10)", createBtn:"Approve & create",
+  loadMore:"Load older", createPool:"Create a task pool", poolTitle:"Pool name", poolDesc:"Description (scope, acceptance criteria, contact; links OK)", depositAmt:"BEM to deposit",
+  approversList:"Reviewer addresses (one per line, 3 recommended)", thresholdM:"Sign-offs needed to settle (M)", burnPct:"Burn % on settlement (default 1, max 10)", createBtn:"Approve & create",
   myBal:"My BEM", needConnect:"Connect your wallet first", noWallet:"No wallet found. Open this page in TokenPocket / MetaMask's in-app browser.", wrongNet:"Please switch to",
   sent:"Transaction sent, waiting…", done:"Confirmed", failed:"Failed", approving:"Approving BEM…", fill:"Please fill all fields", contract:"Contract", token:"Token", rpc:"RPC",
-  explorer:"Explorer", myPools:"Pools I fund", myApprover:"Pools I approve", myRecipient:"Grants I received", none:"None", go:"Open",
+  explorer:"Explorer", myPools:"Pools I posted", myApprover:"Pools I review", myRecipient:"Tasks I took", none:"None", go:"Open",
   todo:"needs you", viewOnScan:"View on BscScan", faucet:"Testnet BNB faucet", mintTest:"Mint 1000 test BEM", only:"only", tx:"tx",
   aboutHtml:`<h2>How it works</h2>
-<ol><li>A <b>funder</b> creates a pool, locks BEM in the contract and names N approvers with an M-of-N release threshold (e.g. 2-of-3). Anyone can top up.</li>
-<li>The funder or an approver carves out <b>milestones</b> (amount + application deadline). That amount becomes “allocated”.</li>
-<li><b>Builders</b> apply (proposal link stored on-chain). When M approvers vote for one application, the recipient is set.</li>
-<li>After delivery, <b>M approvers approve release</b>; the contract pays the recipient and sends the pool's burn share (default 1%) to 0x…dEaD.</li></ol>
-<h2>Trust model</h2>
-<ul><li>Approvers <b>can</b>: award, release, cancel unpaid milestones — each needs M votes.</li>
-<li>Approvers <b>cannot</b>: send funds to themselves or anyone but the recipient; a single approver can do nothing alone.</li>
-<li>The funder <b>can</b> withdraw unallocated balance only after a 7-day on-chain notice.</li>
-<li>The funder <b>cannot</b> touch allocated funds — they only go to the recipient, or back to the pool by an M-of-N cancel.</li>
+<p>A client needs work done. The money is locked in the contract first; once the work is delivered and accepted, it settles automatically. Nobody can back out.</p>
+<ol><li>A <b>client</b> creates a task pool, locks BEM in the contract and names N <b>reviewers</b> with an M-of-N settlement threshold (e.g. 2-of-3). Anyone can top up.</li>
+<li>The client or a reviewer carves out <b>tasks</b> (amount + deadline to take it). That amount becomes “allocated”.</li>
+<li>Contractors submit an <b>offer to take the task</b> (plan link stored on-chain). When M reviewers vote for one offer, the contractor is assigned.</li>
+<li>After delivery, <b>M reviewers accept</b>; the contract settles to the contractor and sends the pool's burn share (default 1%) to 0x…dEaD.</li></ol>
+<h2>Who can do what</h2>
+<ul><li>Reviewers <b>can</b>: assign, accept & settle, cancel unsettled tasks — each needs M votes.</li>
+<li>Reviewers <b>cannot</b>: send funds to themselves or anyone but the contractor; a single reviewer can do nothing alone.</li>
+<li>The client <b>can</b> withdraw unallocated balance only after a 7-day on-chain notice.</li>
+<li>The client <b>cannot</b> touch allocated funds — they only go to the contractor, or back to the pool by an M-of-N cancel.</li>
 <li><b>No owner, not upgradeable</b>, no admin withdrawal. Every step emits an event visible on BscScan.</li>
-<li>Unawarded milestones past their deadline can be expired by anyone (funds return to the pool); a recipient may also relinquish.</li></ul>`
+<li>Unassigned tasks past their deadline can be expired by anyone (funds return to the pool); a contractor may also give up.</li></ul>`
 }};
 let lang = localStorage.getItem("grants_lang") === "en" ? "en" : "zh"; // 中文优先
 const t = k => (I18N[lang] && I18N[lang][k]) ?? I18N.zh[k] ?? k;
@@ -134,7 +138,9 @@ const addrLink = a => `<a class="mono" href="${scanAddr(a)}" target="_blank" rel
 const rawLink = u => `<a class="mono" href="${h(u)}" target="_blank" rel="noopener">${h(u)}</a>`;
 const time = s => new Date(Number(s) * 1000).toLocaleString(lang === "zh" ? "zh-CN" : "en-US");
 /** 显示用户写入的 URI：JSON{title,desc} / 链接（原样显示完整 URL） / 纯文本 */
-function parseUri(u){ try { const j = JSON.parse(u); if (j && typeof j === "object") return { title: String(j.title || ""), desc: String(j.desc || "") }; } catch {} return { title: "", desc: String(u || "") }; }
+function parseUri(u, kind, id){ const o = NET.labelOverrides && NET.labelOverrides[kind] && NET.labelOverrides[kind][id]; if (o) return { title: o[lang] || o.zh, desc: o[lang + "Desc"] ?? o.zhDesc ?? "" };
+  return parseUriRaw(u); }
+function parseUriRaw(u){ try { const j = JSON.parse(u); if (j && typeof j === "object") return { title: String(j.title || ""), desc: String(j.desc || "") }; } catch {} return { title: "", desc: String(u || "") }; }
 function linkify(text){ return h(text).replace(/(https?:\/\/[^\s<]+|ipfs:\/\/[^\s<]+)/g, m => {
   const href = m.startsWith("ipfs://") ? "https://ipfs.io/ipfs/" + m.slice(7) : m; return `<a class="mono" href="${href}" target="_blank" rel="noopener">${m}</a>`; }); }
 function toast(msg, ms = 4000){ const el = $("toast"); el.innerHTML = msg; el.style.display = "block"; clearTimeout(toast._t); if (ms) toast._t = setTimeout(() => el.style.display = "none", ms); }
@@ -179,12 +185,13 @@ async function ensureAllowance(amt){
 async function pageList(){
   const c = esc();
   const [n, L, P, B] = await Promise.all([c.poolCount(), c.totalLocked(), c.totalPaid(), c.totalBurned()]);
-  let html = `<div class="stats"><div class="stat"><b>${fmt(L)}</b><small>${t("totalLocked")} BEM</small></div>
+  let html = `<div class="hero"><h2>${t("heroTitle")}</h2><p>${t("heroSub")}</p></div>
+   <div class="stats"><div class="stat"><b>${fmt(L)}</b><small>${t("totalLocked")} BEM</small></div>
    <div class="stat"><b>${fmt(P)}</b><small>${t("totalPaid")} BEM</small></div><div class="stat burn"><b>🔥 ${fmt(B)}</b><small>${t("totalBurned")} BEM</small></div></div>
    <h2>${t("pools")}</h2>`;
   const ids = []; for (let i = Number(n); i >= 1 && ids.length < 50; i--) ids.push(i);
   const pools = await Promise.all(ids.map(i => c.getPool(i)));
-  html += pools.map((r, k) => { const p = r.pool, u = parseUri(p.uri);
+  html += pools.map((r, k) => { const p = r.pool, u = parseUri(p.uri, "pool", ids[k]);
     return `<a href="#/pool/${ids[k]}" style="text-decoration:none;color:inherit"><div class="card"><b>#${ids[k]} ${h(u.title || u.desc.slice(0, 60))}</b>
      <div class="row muted" style="margin-top:6px"><div>${t("available")}: <b>${fmt(p.available)}</b></div><div>${t("allocated")}: <b>${fmt(p.allocated)}</b></div>
      <div>${t("totalPaid")}: <b>${fmt(p.totalPaid)}</b></div><div>🔥 ${fmt(p.totalBurned)}</div></div>
@@ -201,7 +208,7 @@ function netInfo(){
 
 async function pagePool(id){
   const c = esc();
-  const r = await c.getPool(id), p = r.pool, apprs = r.approvers.map(a => a.toLowerCase()), u = parseUri(p.uri);
+  const r = await c.getPool(id), p = r.pool, apprs = r.approvers.map(a => a.toLowerCase()), u = parseUri(p.uri, "pool", id);
   const isF = me && p.funder.toLowerCase() === me, isA = me && apprs.includes(me);
   const mids = (await c.getPoolMilestoneIds(id)).map(Number).reverse();
   const ms = await Promise.all(mids.map(m => c.getMilestone(m)));
@@ -229,9 +236,9 @@ async function pagePool(id){
   }
 
   html += `<h2>${t("milestones")}</h2>`;
-  html += ms.map((m, k) => { const mid = mids[k], st = ST[Number(m.status)], mu = parseUri(m.uri), apps = appsArr[k], v = votes[k];
+  html += ms.map((m, k) => { const mid = mids[k], st = ST[Number(m.status)], mu = parseUri(m.uri, "task", mid), apps = appsArr[k], v = votes[k];
     const isR = me && m.recipient.toLowerCase() === me, open = st === "Open", awarded = st === "Awarded";
-    let s = `<div class="card" id="m${mid}"><div><span class="tag ${st}">${t(st)}</span> <b>M${mid} ${h(mu.title)}</b></div>${mu.desc ? `<div>${linkify(mu.desc)}</div>` : ""}
+    let s = `<div class="card" id="m${mid}"><div><span class="tag ${st}">${t(st)}</span> <b>#${mid} ${h(mu.title)}</b></div>${mu.desc ? `<div>${linkify(mu.desc)}</div>` : ""}
      <div class="row muted"><div>${t("amount")}: <b style="color:#f0b90b">${fmt(m.amount)}</b> BEM</div><div>${t("deadline")}: ${time(m.deadline)}</div></div>`;
     if (m.recipient !== E.ZeroAddress) s += `<div>${t("recipient")}: ${addrLink(m.recipient)}</div>`;
     if (m.deliveryURI) s += `<div>${t("delivery")}: ${linkify(m.deliveryURI)}</div>`;
@@ -253,11 +260,14 @@ async function pagePool(id){
   return html;
 }
 
-// 链上记录：从最新区块往回按 49000 区块分段扫描（公共 RPC 限制），只保留与本资助池相关的事件
+// 链上记录：从最新区块往回按 49000 区块分段扫描（公共 RPC 限制），只保留与本任务池相关的事件
 let histState = null;
-const EVZH = { PoolCreated:"创建资助池", ToppedUp:"追加资金", MilestoneCreated:"新建里程碑", Applied:"提交申请", AwardVoted:"投票选定", AwardVoteRevoked:"撤回选定票",
-  Awarded:"选定受助人", DeliverySubmitted:"提交交付", ReleaseVoted:"同意放款", Released:"已放款", Burned:"销毁", CancelVoted:"投票取消", MilestoneCancelled:"里程碑已取消",
-  MilestoneExpired:"里程碑过期", Relinquished:"受助人放弃", WithdrawRequested:"申请取回（7 天公示）", WithdrawRequestCancelled:"撤销取回", Withdrawn:"资助方取回" };
+const EVZH = { PoolCreated:"创建任务池", ToppedUp:"追加资金", MilestoneCreated:"新建任务", Applied:"接单申请", AwardVoted:"投票选定", AwardVoteRevoked:"撤回选定票",
+  Awarded:"选定接单人", DeliverySubmitted:"提交交付", ReleaseVoted:"同意结算", Released:"已结算", Burned:"销毁", CancelVoted:"投票取消", MilestoneCancelled:"任务已取消",
+  MilestoneExpired:"任务过期", Relinquished:"接单人放弃", WithdrawRequested:"申请取回（7 天公示）", WithdrawRequestCancelled:"撤销取回", Withdrawn:"发布方取回" };
+const EVEN = { PoolCreated:"Pool created", ToppedUp:"Topped up", MilestoneCreated:"Task created", Applied:"Offer to take", AwardVoted:"Assign vote", AwardVoteRevoked:"Assign vote revoked",
+  Awarded:"Contractor assigned", DeliverySubmitted:"Delivery submitted", ReleaseVoted:"Settle vote", Released:"Settled", Burned:"Burned", CancelVoted:"Cancel vote", MilestoneCancelled:"Task cancelled",
+  MilestoneExpired:"Task expired", Relinquished:"Contractor gave up", WithdrawRequested:"Withdrawal requested (7-day notice)", WithdrawRequestCancelled:"Withdrawal cancelled", Withdrawn:"Client withdrew" };
 const argsOf = ev => Object.fromEntries(ev.fragment.inputs.map((inp, i) => [inp.name, ev.args[i]]));
 async function loadHistory(poolId, midSet, reset){
   if (reset) histState = { poolId, midSet, to: await ro.getBlockNumber(), items: [] };
@@ -274,12 +284,12 @@ async function loadHistory(poolId, midSet, reset){
   }
   const el = $("hist"); if (!el) return;
   el.innerHTML = S.items.map(({ ev, l }) => { const a = argsOf(ev); const bits = [];
-      if ("milestoneId" in a) bits.push("M" + a.milestoneId);
+      if ("milestoneId" in a) bits.push((lang === "zh" ? "任务 #" : "Task #") + a.milestoneId);
       if ("amount" in a) bits.push(fmt(a.amount) + " BEM");
       if ("paid" in a) bits.push("→ " + short(a.recipient) + " " + fmt(a.paid) + ", 🔥 " + fmt(a.burned));
       for (const k of ["approver", "applicant", "from", "funder"]) if (k in a && ev.name !== "PoolCreated") bits.push(short(a[k]));
       if ("votes" in a) bits.push(a.votes + " " + t("awardVotes"));
-      return `<div class="hist"><b>${lang === "zh" ? (EVZH[ev.name] || ev.name) : ev.name}</b> ${h(bits.join(" · "))}<br><span class="muted">#${l.blockNumber}</span> ${rawLink(scanTx(l.transactionHash))}</div>`; }).join("")
+      return `<div class="hist"><b>${(lang === "zh" ? EVZH : EVEN)[ev.name] || ev.name}</b> ${h(bits.join(" · "))}<br><span class="muted">#${l.blockNumber}</span> ${rawLink(scanTx(l.transactionHash))}</div>`; }).join("")
     + (S.err ? `<div class="muted">${h(S.err)}</div>` : "")
     + (S.to >= NET.deployBlock ? `<button class="ghost" onclick="G.more()">${t("loadMore")}</button>` : (S.items.length ? "" : `<div class="muted">${t("none")}</div>`));
 }
@@ -301,10 +311,10 @@ async function pageMe(){
   pools.forEach((r, i) => { if (r.pool.funder.toLowerCase() === me) fund.push(i + 1); if (r.approvers.some(a => a.toLowerCase() === me)) appr.push(i + 1); });
   const lim = Math.min(mc, 300), msAll = await Promise.all(Array.from({ length: lim }, (_, i) => c.getMilestone(mc - i)));
   const mine = msAll.map((m, i) => ({ m, id: mc - i })).filter(x => x.m.recipient.toLowerCase() === me);
-  const plink = id => { const u = parseUri(pools[id - 1].pool.uri); return `<div><a href="#/pool/${id}">#${id} ${h(u.title || u.desc.slice(0, 50))}</a></div>`; };
+  const plink = id => { const u = parseUri(pools[id - 1].pool.uri, "pool", id); return `<div><a href="#/pool/${id}">#${id} ${h(u.title || u.desc.slice(0, 50))}</a></div>`; };
   return `<div class="card"><h3>${t("myPools")}</h3>${fund.map(plink).join("") || t("none")}</div>
    <div class="card"><h3>${t("myApprover")}</h3>${appr.map(plink).join("") || t("none")}</div>
-   <div class="card"><h3>${t("myRecipient")}</h3>${mine.map(x => `<div><a href="#/pool/${x.m.poolId}">M${x.id}</a> <span class="tag ${ST[Number(x.m.status)]}">${t(ST[Number(x.m.status)])}</span> ${fmt(x.m.amount)} BEM</div>`).join("") || t("none")}</div>`;
+   <div class="card"><h3>${t("myRecipient")}</h3>${mine.map(x => `<div><a href="#/pool/${x.m.poolId}">#${x.id}</a> <span class="tag ${ST[Number(x.m.status)]}">${t(ST[Number(x.m.status)])}</span> ${fmt(x.m.amount)} BEM</div>`).join("") || t("none")}</div>`;
 }
 
 // ------------------------------------------------------------------ actions
@@ -326,7 +336,7 @@ const G = window.G = {
     const title = $("cpTitle").value.trim(), desc = $("cpDesc").value.trim(), v = $("cpAmt").value.trim(), M = Number($("cpM").value), burn = Number($("cpBurn").value);
     const appr = $("cpAppr").value.split(/[\s,;]+/).filter(Boolean);
     if (!title || !v || !appr.length || !(M >= 1)) return toast(t("fill"));
-    if (appr.some(a => !E.isAddress(a))) return toast("approver address?");
+    if (appr.some(a => !E.isAddress(a))) return toast("reviewer address?");
     if (M > appr.length) return toast("M > N"); if (!(burn >= 0 && burn <= 10)) return toast("0–10%");
     const amt = E.parseUnits(v, dec);
     if (await ensureAllowance(amt)) { const ok = await send(() => esc().createPool(amt, JSON.stringify({ title, desc }), appr.map(a => E.getAddress(a)), M, Math.round(burn * 100)));

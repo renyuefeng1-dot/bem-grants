@@ -35,3 +35,5 @@ label{font-size:13px;color:#aaa}
 .panel{border-left:3px solid #f0b90b;padding-left:10px}
 h2{font-size:18px;margin:8px 0}h3{font-size:16px;margin:6px 0}
 @media(min-width:700px){body{font-size:15px}.stat b{font-size:22px}}
+.hero{background:linear-gradient(135deg,#1d222c,#171b23);border:1px solid #262b36;border-radius:12px;padding:14px;margin:10px 0}
+.hero h2{color:#f0b90b;font-size:20px;margin:0 0 6px}.hero p{margin:0;color:#c8cad2;font-size:14px}

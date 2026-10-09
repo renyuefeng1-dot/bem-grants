@@ -1,0 +1,37 @@
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#0f1115;color:#e8e8ea;font-size:15px;line-height:1.5}
+a{color:#f0b90b;word-break:break-all}
+.banner{background:#d33;color:#fff;text-align:center;padding:6px 10px;font-weight:600;font-size:14px}
+header{position:sticky;top:0;z-index:5;background:#161a22;border-bottom:1px solid #262b36;padding:10px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+header h1{font-size:17px;margin:0;flex:1;min-width:150px}
+header h1 a{color:#e8e8ea;text-decoration:none}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 12px;background:#12151c;border-bottom:1px solid #222}
+nav a{padding:6px 12px;border-radius:16px;background:#1d222c;color:#ccc;text-decoration:none;white-space:nowrap;font-size:14px}
+nav a.on{background:#f0b90b;color:#111}
+main{max-width:860px;margin:auto;padding:12px}
+.card{background:#171b23;border:1px solid #262b36;border-radius:12px;padding:14px;margin:10px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#1d222c;border-radius:10px;padding:10px;text-align:center}
+.stat b{display:block;font-size:18px;color:#f0b90b;word-break:break-all}
+.stat small{color:#999}
+.stat.burn b{color:#ff5a4f}
+button{background:#f0b90b;color:#111;border:0;border-radius:8px;padding:10px 14px;font-size:15px;font-weight:600;cursor:pointer;margin:4px 4px 4px 0}
+button.ghost{background:#262b36;color:#e8e8ea}
+button.red{background:#c0392b;color:#fff}
+button:disabled{opacity:.5}
+input,textarea,select{width:100%;padding:10px;margin:4px 0 8px;border-radius:8px;border:1px solid #333a48;background:#0f1218;color:#eee;font-size:15px}
+textarea{min-height:70px}
+label{font-size:13px;color:#aaa}
+.muted{color:#8b90a0;font-size:13px}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;word-break:break-all}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;background:#262b36;margin-right:4px}
+.tag.Open{background:#1e4f8a}.tag.Awarded{background:#7a5a00}.tag.Paid{background:#1d6b3a}.tag.Cancelled{background:#555}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1;min-width:120px}
+.app{border-top:1px dashed #333;padding:8px 0}
+.hist{font-size:13px;border-top:1px solid #222;padding:6px 0}
+.lang{background:#262b36;color:#eee;padding:6px 10px;font-size:13px}
+#acct{font-size:12px}
+.toast{position:fixed;bottom:12px;left:12px;right:12px;background:#222a;backdrop-filter:blur(6px);border:1px solid #444;padding:10px;border-radius:10px;display:none;z-index:9}
+.panel{border-left:3px solid #f0b90b;padding-left:10px}
+h2{font-size:18px;margin:8px 0}h3{font-size:16px;margin:6px 0}
+@media(min-width:700px){body{font-size:15px}.stat b{font-size:22px}}

@@ -1,0 +1,17 @@
+# secrets
+.env
+.env.*
+*.key
+*.pem
+keystore/
+# build
+out/
+cache/
+lib/
+broadcast/*/dry-run/
+broadcast/**/*.recovery.lock
+node_modules/
+broadcast/
+.testkeys*
+deploy/*.secret
+e2e/*.png
